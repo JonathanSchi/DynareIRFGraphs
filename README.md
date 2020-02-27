@@ -5,11 +5,11 @@ This package is intended to create nice looking Dynare IRFs that do not require 
 To create the output it relies on the OccBin package by Luca Guerrieriand Matteo Iacoviello. All files apart from GraphCompareJS, clean_up, and  cg2printtemplate belong to the above mentioned authors. Note that these files might be adjusted to account for changes in Matlab that made their original files fail to execute. 
 This package is written and optimized for Matlab. There is no guarantee that it will work with Octave. 
 
-To use this package refer to the file: HowToUseGraphCompareJS which provides an example with comments.
+To use this package refer to the file: HowToUseGraphCompareJS which provides an example with comments. Store all the files in this repository in a folder and add it to your Matlab path. Note that this package is optimized for Live-Scripts. 
 Apart from that refer to the following information:
 
 File to run dynare with the occbin toolbox. Call this file
-in a script containing the following input:
+in a Live-script containing the following input:
 1.  "Directories". A nx1 char array containing the folders that store mod files
 2.  "VAR_Shortname". A 1xn char array containing all variables to be shown
 3.  "VAR_Longname". A 1xn char array containing the names of the variables to
@@ -43,8 +43,11 @@ in a script containing the following input:
 12. "Linestyle"={'bw' or 'n'} with bw for black and white printer friendy
     and n for normal
 13. "DirectorySAVE"={'MyLatexDirectory'} defines a folder where the IRFs
-    are stored in .eps and with latex friendly names 
-14. print_NAME='NameofFile' that is stored in your folder. 
+    are stored in .eps and with latex friendly names. 
+    This command deletes the output in the live script, but saves it to the defined folder. 
+    The Live-Script will report the respective folder. Not defining "DirectorySAVE" shows
+    the IRFs in the live script. 
+14. print_NAME='NameofFile' that is to be stored in your folder. 
 15. You can skip colors and linestyle (in case you want specific cases to
     have specific colors or linestyles by adding: colorskip=n and
     linestyleskip=n where n is an integer bigger than 0. If you do not want
