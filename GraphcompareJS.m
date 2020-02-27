@@ -288,7 +288,7 @@ else
     %Make background transparent
     set(fig,'Color','none');
     %Create Name for file without blanks or non suited signs
-    deletee={'.',' ',',',':',';','/','\','(',')','[',']','{','}','�','%','&','$'};
+    deletee={'ä','ö','ü','ß','.',' ',',',':',';','/','\','(',')','[',']','{','}','§','%','&','$'};
     replacee=repmat({''},1,size(deletee,2));
     for i=1:size(deletee,2)
         print_NAME=strrep(print_NAME,deletee{i},replacee{i});
