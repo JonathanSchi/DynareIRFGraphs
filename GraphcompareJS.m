@@ -69,9 +69,9 @@ cd(Directories{ii})
             solve_no_constraint(Model_Names{ii,1},...
             shocksequences(:,ii),irfshocks{ii},nperiods);
         for i=1:Mbase_.endo_nbr
-              eval([deblank(Mbase_.endo_names(i,:)),'_linear',Num_model{ii},'=zdata_(:,i);']);
-              eval([deblank(Mbase_.endo_names(i,:)),'_piecewise',Num_model{ii},'=zdata_(:,i);']);
-              eval([deblank(Mbase_.endo_names(i,:)),'_ss',Num_model{ii},'=zdatass_(i);']);
+              eval([deblank(Mbase_.endo_names{i,:}),'_linear',Num_model{ii},'=zdata_(:,i);']);
+              eval([deblank(Mbase_.endo_names{i,:}),'_piecewise',Num_model{ii},'=zdata_(:,i);']);
+              eval([deblank(Mbase_.endo_names{i,:}),'_ss',Num_model{ii},'=zdatass_(i);']);
         end
     elseif isempty(Model_Names{ii,3})
         disp OCCBINONECONSTRAINT
@@ -80,9 +80,9 @@ cd(Directories{ii})
           constraints{ii,1}, constraints_relax{ii,1},...
           shocksequences(:,ii),irfshocks{ii},nperiods);
           for i=1:Mbase_.endo_nbr
-              eval([deblank(Mbase_.endo_names(i,:)),'_linear',Num_model{ii},'=zdatalinear(:,i);']);
-              eval([deblank(Mbase_.endo_names(i,:)),'_piecewise',Num_model{ii},'=zdatapiecewise(:,i);']);
-              eval([deblank(Mbase_.endo_names(i,:)),'_ss',Num_model{ii},'=zdatass(i);']);
+              eval([deblank(Mbase_.endo_names{i,:}),'_linear',Num_model{ii},'=zdatalinear(:,i);']);
+              eval([deblank(Mbase_.endo_names{i,:}),'_piecewise',Num_model{ii},'=zdatapiecewise(:,i);']);
+              eval([deblank(Mbase_.endo_names{i,:}),'_ss',Num_model{ii},'=zdatass(i);']);
           end
     else
         disp OCCBINTWOCONSTRAINT
@@ -91,9 +91,9 @@ cd(Directories{ii})
               constraints{ii,1}, constraints{ii,2},constraints_relax{ii,1},... 
               constraints_relax{ii,2}, shocksequences(:,ii),irfshocks{ii},nperiods);
            for i=1:Mbase_.endo_nbr
-              eval([deblank(Mbase_.endo_names(i,:)),'_linear',Num_model{ii},'=zdatalinear(:,i);']);
-              eval([deblank(Mbase_.endo_names(i,:)),'_piecewise',Num_model{ii},'=zdatapiecewise(:,i);']);
-              eval([deblank(Mbase_.endo_names(i,:)),'_ss',Num_model{ii},'=zdatass(i);']);
+              eval([deblank(Mbase_.endo_names{i,:}),'_linear',Num_model{ii},'=zdatalinear(:,i);']);
+              eval([deblank(Mbase_.endo_names{i,:}),'_piecewise',Num_model{ii},'=zdatapiecewise(:,i);']);
+              eval([deblank(Mbase_.endo_names{i,:}),'_ss',Num_model{ii},'=zdatass(i);']);
            end
     end    
     

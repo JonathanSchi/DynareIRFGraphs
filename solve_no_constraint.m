@@ -16,11 +16,11 @@ nvars = numel(ys_);
 zdatass_ = ys_ ;
 
 for i=1:Mbase_.endo_nbr
-  eval([deblank(Mbase_.endo_names(i,:)) '_ss = oo_.dr.ys(i); ']);
+  eval([deblank(Mbase_.endo_names{i,:}),'_ss = oo_.dr.ys(i); ']);
 end
 
 for i = 1:size(Mbase_.param_names)
-  eval([Mbase_.param_names(i,:),'= M_.params(i);']);
+  eval([Mbase_.param_names{i,:},'= M_.params(i);']);
 end
 
 

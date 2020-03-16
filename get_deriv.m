@@ -44,13 +44,12 @@ y = [y;ys_(lea_cols)];
 
  
 if ismac
-eval(['[resid,g1]=',M_.fname,'_dynamic(y,x, M_.params, ys_, it_);']);
+eval(['[resid,g1]=',M_.fname,'dynamic(y,x, M_.params, ys_, it_);']);
 % Older versions of DYNARE for Mac did not include ys_ in the call structure    
 %eval(['[resid,g1]=',M_.fname,'_dynamic(y,x, M_.params, it_);']);
 else
-eval(['[resid,g1]=',M_.fname,'_dynamic(y,x, M_.params, ys_, it_);']);
+eval(['[resid,g1]=',M_.fname,'.dynamic(y,x, M_.params, ys_, it_);']);
 end
-
  
 hm1=zeros(M_.endo_nbr);
 h = hm1;

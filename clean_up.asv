@@ -16,10 +16,11 @@ for ii=1:num_mod
     if exist(mod_name,'dir') == 7
     rmdir(mod_name,'s');
     end
-    eval(['model_name2="+',mod_name,'";']);
-    if exist(model_name2) == 7
+    model_name2=['+',mod_name])
     rmdir(model_name2,'s')
-    end 
+    exist([mod_name,mod_name2],'dir')
+    
+    if 
 end
 
 delete *_dynamic.m
