@@ -46,11 +46,11 @@ M00_ = M_;
 
 
 for i=1:M00_.endo_nbr
-   eval([deblank(M00_.endo_names(i,:)) '_ss = oo00_.dr.ys(i); ']);
+   eval([deblank(M00_.endo_names{i,:}) '_ss = oo00_.dr.ys(i); ']);
 end
 
 for i_indx_ = 1:M00_.param_nbr
-  eval([M00_.param_names(i_indx_,:),'= M00_.params(i_indx_);']);
+  eval([M00_.param_names{i_indx_,:},'= M00_.params(i_indx_);']);
 end
 
 
