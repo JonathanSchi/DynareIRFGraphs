@@ -47,6 +47,7 @@
 %
 %% Don't change anything from here on
 close all;
+pause on;
 %transpose(shocksequences);
 Num_VAR=length(VAR_Shortname);
 Num_Columns=min(3,ceil((sqrt(Num_VAR))));
@@ -98,10 +99,13 @@ cd(Directories{ii})
     end    
     
 %clean up the folder (clean_up is saved in the occbin folder, if you miss the file exclude this section!)
-clean_up
+%clean_up
 cd ..
 end
-
+for ii=1:Num_Models
+   cd(Directories{ii})
+   clean_up
+end
 
 %% Plot graphs
 
