@@ -2,7 +2,7 @@
 %pause on
 temp_list=dir('*.mod');
 [num_mod,~]=size(temp_list);
-
+%clear functions
 
 
 
@@ -31,12 +31,29 @@ for ii=1:num_mod
     rmdir([mod_name,'/Output']);
     end
     if exist(mod_name,'dir') == 7
-    rmdir(mod_name,'s');
+    status=0;
+    loopnumber=0;
+        while status==0
+        status=rmdir(mod_name,'s');
+        loopnumber=loopnumber+1;
+        if loopnumber==50
+            disp('Unable to delete Folder!')
+            status=1;
+        end
+        end
     end
     eval(['model_name2="+',mod_name,'";']);
     if exist(model_name2) == 7
-    %pause(15);    
-    rmdir(model_name2,'s');
+    status=0;
+    loopnumber=0;
+        while status==0
+        status=rmdir(model_name2,'s');
+        loopnumber=loopnumber+1;
+        if loopnumber==50
+            disp('Unable to delete Folder!')
+            status=1;
+        end
+        end
     end 
     
 end

@@ -48,6 +48,7 @@
 %% Don't change anything from here on
 close all;
 pause on;
+currentFolder=pwd;
 %transpose(shocksequences);
 Num_VAR=length(VAR_Shortname);
 Num_Columns=min(3,ceil((sqrt(Num_VAR))));
@@ -102,10 +103,7 @@ cd(Directories{ii})
 %clean_up
 cd ..
 end
-for ii=1:Num_Models
-   cd(Directories{ii})
-   clean_up
-end
+
 
 %% Plot graphs
 
@@ -312,6 +310,11 @@ end
 
 colorskip=0;
 linestyleskip=0;
+for ii=1:Num_Models
+   cd(Directories{ii})
+   clean_up
+end
+cd(currentFolder)
 %%%%%%
 %TODO:
 %1 Allow for other files (pdf ..... ) 
