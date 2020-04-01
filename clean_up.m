@@ -2,6 +2,7 @@
 %pause on
 temp_list=dir('*.mod');
 [num_mod,~]=size(temp_list);
+FolderCurrent=pwd;
 %clear functions
 
 
@@ -37,12 +38,12 @@ for ii=1:num_mod
         status=rmdir(mod_name,'s');
         loopnumber=loopnumber+1;
         if loopnumber==50
-            disp('Unable to delete Folder!')
+            disp(['Unable to delete Folder ',mod_name,' in ',FolderCurrent,'!'])
             status=1;
         end
         end
     end
-    eval(['model_name2="+',mod_name,'";']);
+    eval(['model_name2=''+',mod_name,''';']);
     if exist(model_name2) == 7
     status=0;
     loopnumber=0;
@@ -50,7 +51,7 @@ for ii=1:num_mod
         status=rmdir(model_name2,'s');
         loopnumber=loopnumber+1;
         if loopnumber==50
-            disp('Unable to delete Folder!')
+            disp(['Unable to delete Folder ',model_name2,' in ',FolderCurrent,'!'])
             status=1;
         end
         end
