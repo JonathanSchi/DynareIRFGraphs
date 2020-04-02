@@ -11,12 +11,17 @@ eval(['dynare ',modnam,' noclearall'])
 oobase_ = oo_;
 Mbase_ = M_;
 
-ys_ = oobase_.dr.ys;
+if isempty(oobase_.dr)
+    ys_ = oobase_.steady_state;
+else
+    ys_ = oobase_.dr.ys;
+end
 nvars = numel(ys_);
 zdatass_ = ys_ ;
 
 for i=1:Mbase_.endo_nbr
-        eval([deblank(Mbase_.endo_names{i,:}),'_ss = oo_.dr.ys(i); ']);
+  if
+    eval([deblank(Mbase_.endo_names{i,:}),'_ss = oo_.dr.ys(i); ']);
 end
 
 for i = 1:size(Mbase_.param_names)

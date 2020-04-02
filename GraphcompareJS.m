@@ -42,7 +42,19 @@
 %skip the first, but the second color or linestyle, then add a
 %colorskipnum=2 and linestyleskipnum=2. These options are optional and can
 %be left out without problems.
-%16.A command line: "run GraphcompareJS.m"
+%16. ModelSolving='loglin' for loglinearized version or 'lin' for linearized
+%version. Basically, indicate how this script has to interpret your results.
+%In a linear model indicate 'loglin' if your variables are presented
+%with an exp (e.g. exp(y)=exp(K)^(1-alpha)*exp(L)^(alpha)). Note that, 
+%when plotting, variables with a zero steady state will automatically 
+%be treated differently, as a percent deviation from 0 cannot be
+%computed. 
+%17. "DispType". Just as "Annualized". Shows variables in different Styles.
+%0=% deviation from steady state (standard), 1=Units (for variables with a 
+%steady state of 0), 2=Percentage (usefull for e.g.interest rates). If left
+%out all variables will be shown in % deviation from ss. Only possible for
+%models solved linearly!
+%18.A command line: "run GraphcompareJS.m"
  
 %
 %% Don't change anything from here on
@@ -99,8 +111,7 @@ cd(Directories{ii})
            end
     end    
     
-%clean up the folder (clean_up is saved in the occbin folder, if you miss the file exclude this section!)
-%clean_up
+
 cd ..
 end
 
@@ -125,7 +136,7 @@ end
 %Colordefintion
 colorr={'[0 0 0]','[0.8  0.2  0.0]','[0.2  0.6  0.8]','[0.4  0.6  0.7]','[0.2  0.8  0.8]','[0.0  1.0  0.9]'}; %
 %colorr={'[0 0 0]','[0.0  0.8  0.5]','[0.2  0.6  0.8]','[0.4  0.6  0.7]','[0.2  0.8  0.8]','[0.0  1.0  0.9]'};
-if exist('Linestyle')==0
+if exist('Linestyle','var')==0
     Linestyle={'n'};
 end
 
@@ -176,18 +187,74 @@ for nn=1:Num_Models
     end
 end
 
-
+disp(['Plotting assuming that the model is solved by ', ModelSolving,'earization!'])
 %plot
 zeroline=zeros(1,nperiods);
+yaxislabelann={'Annualized $\%\Delta$ from ss' 'Annualized Units' 'Annualized $\%$'};
+yaxislabel={'$\%\Delta$ from ss' 'Units' '$\%$'};
 for mm=1:Num_VAR
     %Define horizontal place in grid
     RRR=mod(mm,Num_Columns);
         if RRR==0
             RRR=Num_Columns;
         end
+    if Annualized(mm)==1
+        Annu=4;
+    else
+        Annu=1;
+    end
+    if exist('DispType','var')==0
+       DispType=zeros(1,Num_VAR); %Avoid error when not specifying type
+    end
+    if exist('ModelSolving','var')==0
+        ModelSolving='loglin';
+    end
+    DispTypee=logical([1 0 0]);      %Initialize Type (dev from SS)
+    if ModelSolving=='lin'
+        if DispType(mm)==0
+        DispTypee=logical([1 0 0]); %Dev from SS
+        elseif DispType(mm)==1
+        DispTypee=logical([0 1 0]); %Units
+        else
+        DispTypee=logical([0 0 1]); %Percentage
+        end
+    end
+    DivSS=1; %= do not divide by SS
+    SS0=0; %=there is no zero SS (just for lin)
+    Percentt=100; %=show everything in percent
+    PlusSS=0; %= do not add the SS to the IRF value
+    for nn=1:Num_Models
+            eval(['VarSS(',num2str(nn),')=',VAR_Shortname{mm},'_ss',num2str(nn),';']);
+    end
+    Num_ZeroSS=nnz(~VarSS);
+        if ModelSolving=='lin'    
+            if Num_ZeroSS>0 %Can only display percent or units!
+                SS0=1;
+                if DispType(mm)==1 %Units
+                    Percentt=1;
+                    DispTypee=logical([0 1 0]);
+                else               %Percentage
+                    Percentt=100;
+                    DispTypee=logical([0 0 1]);
+                end
+            end
+        end
     %Plot figures for all models and all variables using subplot with a
     %predefined grid size to avoid shifts.
     for nn=1:Num_Models 
+        if SS0==1 
+        elseif DispType(mm)==0 & ModelSolving=='lin'
+            DivSS=VarSS(nn);
+            PlusSS=0;
+        elseif DispType(mm)==1 & ModelSolving=='lin'
+            Percentt=1;
+            DivSS=1;
+            PlusSS=VarSS(nn);
+        elseif DispType(mm)==2 & ModelSolving=='lin'
+            Percentt=100;
+            DivSS=1;
+            PlusSS=VarSS(nn);
+        end
         linestyleskipp=0;
         colorskipp=0;
         if colorskipnum==nn
@@ -196,45 +263,28 @@ for mm=1:Num_VAR
         if linestyleskipnum==nn
             linestyleskipp=linestyleskip;
         end
+        %Plotting
         subplot('Position',[0.1+(RRR-1)*(1/Num_Columns) 0.07+1/Num_Rows*(Num_Rows-ceil(mm/Num_Rows)) 1/Num_Columns-0.11 1/Num_Rows-0.1])
-            if Annualized(1,mm)==1
-                if includelinearsolution(nn)==1
-                    plot(t,400*IRFs(((nn-1)*nperiods+1):(nn*nperiods),mm),linestylee{nn+linestyleskipp},'LineWidth',2,'Color',colorr{nn+colorskipp}) 
-                    %grid on
-                    hold on
-                    plot(t,400*IRFslinear(((nn-1)*nperiods+1):(nn*nperiods),mm),'--','LineWidth',2,'Color',colorr{nn+colorskipp})
-                    hold on
-                elseif includelinearsolution(nn)==0
-                    %grid on
-                    plot(t,400*IRFs(((nn-1)*nperiods+1):(nn*nperiods),mm),linestylee{nn+linestyleskipp},'LineWidth',2,'Color',colorr{nn+colorskipp})
-                else
-                    %grid on
-                    plot(t,400*IRFslinear(((nn-1)*nperiods+1):(nn*nperiods),mm),'--','LineWidth',2,'Color',colorr{nn+colorskipp})
-                end
-                yylabel=ylabel([{'Annualized $\%\Delta$ from ss'}], 'Interpreter','LaTex','FontSize',14);
-                set(yylabel, 'Units', 'Normalized')
-                poss=get(yylabel, 'Position');
-                set(yylabel, 'Position', poss + [-poss(1,1)-0.15, 0, 0]);
-            else
-                if includelinearsolution(nn)==1
-                    plot(t,100*IRFs(((nn-1)*nperiods+1):(nn*nperiods),mm),linestylee{nn+linestyleskipp},'LineWidth',2,'Color',colorr{nn+colorskipp})
-                    %grid on
-                    hold on
-                    plot(t,100*IRFslinear(((nn-1)*nperiods+1):(nn*nperiods),mm),'--','LineWidth',2,'Color',colorr{nn+colorskipp})
-                 elseif includelinearsolution(nn)==0
-                    %grid on
-                    plot(t,100*IRFs(((nn-1)*nperiods+1):(nn*nperiods),mm),linestylee{nn+linestyleskipp},'LineWidth',2,'Color',colorr{nn+colorskipp})
-                else
-                    %grid on
-                    plot(t,100*IRFslinear(((nn-1)*nperiods+1):(nn*nperiods),mm),'--','LineWidth',2,'Color',colorr{nn+colorskipp})
-                end
-                yylabel=ylabel([{'$\%\Delta$ from ss'}], 'Interpreter','LaTex','FontSize',14);
-                set(yylabel, 'Units', 'Normalized')
-                poss=get(yylabel, 'Position');
-                set(yylabel, 'Position', poss + [-poss(1,1)-0.15, 0, 0]);
+            if includelinearsolution(nn)==0 || includelinearsolution(nn)==1
+            	plot(t,Annu*Percentt/DivSS*(PlusSS+IRFs(((nn-1)*nperiods+1):(nn*nperiods),mm)),linestylee{nn+linestyleskipp},'LineWidth',2,'Color',colorr{nn+colorskipp})
+                hold on
             end
-            hold on
-            grid on
+            if includelinearsolution(nn)==1 || includelinearsolution(nn)==2    
+                plot(t,Annu*Percentt/DivSS*(PlusSS+IRFslinear(((nn-1)*nperiods+1):(nn*nperiods),mm)),'--','LineWidth',2,'Color',colorr{nn+colorskipp})
+                hold on
+            end
+            if Annu==1
+                yylabel=ylabel(yaxislabel{DispTypee}, 'Interpreter','LaTex','FontSize',14);
+            else
+                yylabel=ylabel(yaxislabelann{DispTypee}, 'Interpreter','LaTex','FontSize',14);
+            end
+            set(yylabel, 'Units', 'Normalized')
+            poss=get(yylabel, 'Position');
+            set(yylabel, 'Position', poss + [-poss(1,1)-0.15, 0, 0]);
+            
+           
+        hold on
+        grid on
     end
     %include title
     if isempty(VAR_Longname{mm})
