@@ -42,9 +42,9 @@
 %skip the first, but the second color or linestyle, then add a
 %colorskipnum=2 and linestyleskipnum=2. These options are optional and can
 %be left out without problems.
-%16. ModelSolving='loglin' for loglinearized version or 'lin' for linearized
+%16. ModelSolving=0 for loglinearized version or 1 for linearized
 %version. Basically, indicate how this script has to interpret your results.
-%In a linear model indicate 'loglin' if your variables are presented
+%In a linear model indicate 0 if your variables are presented
 %with an exp (e.g. exp(y)=exp(K)^(1-alpha)*exp(L)^(alpha)). Note that, 
 %when plotting, variables with a zero steady state will automatically 
 %be treated differently, as a percent deviation from 0 cannot be
@@ -56,7 +56,7 @@
 %models solved linearly!
 %18.A command line: "run GraphcompareJS.m"
  
-%
+
 %% Don't change anything from here on
 close all;
 pause on;
@@ -207,10 +207,10 @@ for mm=1:Num_VAR
        DispType=zeros(1,Num_VAR); %Avoid error when not specifying type
     end
     if exist('ModelSolving','var')==0
-        ModelSolving='loglin';
+        ModelSolving=0;
     end
     DispTypee=logical([1 0 0]);      %Initialize Type (dev from SS)
-    if ModelSolving=='lin'
+    if ModelSolving==1
         if DispType(mm)==0
         DispTypee=logical([1 0 0]); %Dev from SS
         elseif DispType(mm)==1
@@ -227,7 +227,7 @@ for mm=1:Num_VAR
             eval(['VarSS(',num2str(nn),')=',VAR_Shortname{mm},'_ss',num2str(nn),';']);
     end
     Num_ZeroSS=nnz(~VarSS);
-        if ModelSolving=='lin'    
+        if ModelSolving==1    
             if Num_ZeroSS>0 %Can only display percent or units!
                 SS0=1;
                 if DispType(mm)==1 %Units
@@ -243,14 +243,14 @@ for mm=1:Num_VAR
     %predefined grid size to avoid shifts.
     for nn=1:Num_Models 
         if SS0==1 
-        elseif DispType(mm)==0 & ModelSolving=='lin'
+        elseif DispType(mm)==0 && ModelSolving==1
             DivSS=VarSS(nn);
             PlusSS=0;
-        elseif DispType(mm)==1 & ModelSolving=='lin'
+        elseif DispType(mm)==1 && ModelSolving==1
             Percentt=1;
             DivSS=1;
             PlusSS=VarSS(nn);
-        elseif DispType(mm)==2 & ModelSolving=='lin'
+        elseif DispType(mm)==2 && ModelSolving==1
             Percentt=100;
             DivSS=1;
             PlusSS=VarSS(nn);
