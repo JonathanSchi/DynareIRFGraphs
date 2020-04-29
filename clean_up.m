@@ -11,14 +11,14 @@ delete *_dynamic.m
 delete *_steadystate2.m
 delete *_set_auxiliary_variables.m
 delete *_static.m
-delete *.eps
+%delete *.eps
 delete *.asv
 delete *.jnl
 delete *.tex
 delete *.aux
 delete *.dvi
 delete *.log
-delete *.pdf
+%delete *.pdf
 delete *.ps
 delete *.gz
 

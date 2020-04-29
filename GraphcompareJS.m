@@ -186,8 +186,14 @@ for nn=1:Num_Models
         IRFslinear(((nn-1)*nperiods+1):(nn*nperiods),mm)=evalin('base',NamesforlinearIRFs{nn,mm});
     end
 end
-
-disp(['Plotting assuming that the model is solved by ', ModelSolving,'earization!'])
+if exist('ModelSolving','var')==0
+        ModelSolving=1-options_.loglinear;
+end
+if ModelSolving==0
+    disp('Plotting assuming that the model is solved by loglinearization!')
+else
+    disp('Plotting assuming that the model is solved by linearization!')
+end
 %plot
 zeroline=zeros(1,nperiods);
 yaxislabelann={'Annualized $\%\Delta$ from ss' 'Annualized Units' 'Annualized $\%$'};
@@ -206,9 +212,7 @@ for mm=1:Num_VAR
     if exist('DispType','var')==0
        DispType=zeros(1,Num_VAR); %Avoid error when not specifying type
     end
-    if exist('ModelSolving','var')==0
-        ModelSolving=0;
-    end
+    
     DispTypee=logical([1 0 0]);      %Initialize Type (dev from SS)
     if ModelSolving==1
         if DispType(mm)==0
