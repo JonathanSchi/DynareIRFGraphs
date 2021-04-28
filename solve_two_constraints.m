@@ -235,7 +235,7 @@ for ishock_ = 1:nshocks
             irfshock_,shockssequence_(ishock_,:),init_);
         
         for i_indx_=1:nwishes_
-            eval([deblank(wishlist_(i_indx_,:)),'_difference=zdatalinear_(:,i_indx_);']);
+            eval([deblank(char(wishlist_(i_indx_,:))),'_difference=zdatalinear_(:,i_indx_);']);
         end
         
         

@@ -134,14 +134,14 @@ if exist('linestyleskip','var')==0
     linestyleskip=0;
 end
 %Colordefintion
-colorr={'[0 0 0]','[0.8  0.2  0.0]','[0.2  0.6  0.8]','[0.4  0.6  0.7]','[0.2  0.8  0.8]','[0.0  1.0  0.9]'}; %
+colorr={'[0 0 0]','[0.8  0.2  0.0]','[0.2  0.6  0.8]','[0.0  0.5  0.0]','[0.2  0.8  0.8]','[0.0  1.0  0.9]'}; %
 %colorr={'[0 0 0]','[0.0  0.8  0.5]','[0.2  0.6  0.8]','[0.4  0.6  0.7]','[0.2  0.8  0.8]','[0.0  1.0  0.9]'};
 if exist('Linestyle','var')==0
     Linestyle={'n'};
 end
 
 if Linestyle{1}=='bw'
-    linestylee={'-',':','-.','-.*'};%
+    linestylee={'-',':','-.','--'};%
 elseif Linestyle{1}=='n'
     linestylee={'-','-','-','-','-'};
 else
@@ -267,6 +267,7 @@ for mm=1:Num_VAR
         if linestyleskipnum==nn
             linestyleskipp=linestyleskip;
         end
+        
         %Plotting
         subplot('Position',[0.1+(RRR-1)*(1/Num_Columns) 0.07+1/Num_Rows*(Num_Rows-ceil(mm/Num_Rows)) 1/Num_Columns-0.11 1/Num_Rows-0.1])
             if includelinearsolution(nn)==0 || includelinearsolution(nn)==1
@@ -283,9 +284,10 @@ for mm=1:Num_VAR
                 yylabel=ylabel(yaxislabelann{DispTypee}, 'Interpreter','LaTex','FontSize',14);
             end
             set(yylabel, 'Units', 'Normalized')
+            if Num_VAR>1
             poss=get(yylabel, 'Position');
             set(yylabel, 'Position', poss + [-poss(1,1)-0.15, 0, 0]);
-            
+            end
            
         hold on
         grid on
@@ -307,10 +309,10 @@ for mm=1:Num_VAR
                    legend2{1,ll+countt}=Legend_Names{1,ll}; 
                elseif includelinearsolution(ll)==1
                    legend2{1,ll+countt}=Legend_Names{1,ll};
-                   legend2{1,ll+countt+1}=[Legend_Names{1,ll},' (without constraint)'];
+                   legend2{1,ll+countt+1}=[Legend_Names{1,ll},' (without ZLB)'];
                    countt=1+countt;
                else 
-                   legend2{1,ll+countt}=[Legend_Names{1,ll},' (without constraint)'];
+                   legend2{1,ll+countt}=[Legend_Names{1,ll},' (without ZLB)'];
                end
                %if isempty(Model_Names{ll,2})
                %    legend2{1,ll+countt}=[Legend_Names{1,ll},' (without constraint)'];
@@ -319,7 +321,8 @@ for mm=1:Num_VAR
         
             legend1=legend(legend2,'Orientation','horizontal', 'Interpreter','LaTex','FontSize',14);
             legend boxoff
-            set(legend1,'Position',[0.5 0.003+1/Num_Rows*(Num_Rows-ceil(Num_VAR/Num_Rows)) 0.0 0.02],'AutoUpdate','off');
+            set(legend1,'Position',[0.5+0.025 0.003+1/Num_Rows*(Num_Rows-ceil(Num_VAR/Num_Rows)) 0 0.02],'AutoUpdate','off');
+            
         end
     end
    
