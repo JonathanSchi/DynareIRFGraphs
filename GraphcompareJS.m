@@ -196,8 +196,8 @@ else
 end
 %plot
 zeroline=zeros(1,nperiods);
-yaxislabelann={'Annualized $\%\Delta$ from ss' 'Annualized Units' 'Annualized $\%$'};
-yaxislabel={'$\%\Delta$ from ss' 'Units' '$\%$'};
+yaxislabelann={'Annualized $\%\Delta$ from ss' 'Annualized $\Delta$ from ss' 'Annualized $\%$'};
+yaxislabel={'$\%\Delta$ from ss' '$\Delta$ from ss' '$\%$'};
 for mm=1:Num_VAR
     %Define horizontal place in grid
     RRR=mod(mm,Num_Columns);
