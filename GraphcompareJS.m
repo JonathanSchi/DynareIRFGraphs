@@ -125,10 +125,10 @@ if exist('colorskip','var')==0
     colorskip=0;
 end
 if exist('colorskipnum','var')==0
-    colorskipnum=0;
+    colorskipnum=1;
 end
 if exist('linestyleskipnum','var')==0
-    linestyleskipnum=0;
+    linestyleskipnum=1;
 end
 if exist('linestyleskip','var')==0
     linestyleskip=0;
@@ -227,6 +227,7 @@ for mm=1:Num_VAR
     SS0=0; %=there is no zero SS (just for lin)
     Percentt=100; %=show everything in percent
     PlusSS=0; %= do not add the SS to the IRF value
+    VarSS=[];
     for nn=1:Num_Models
             eval(['VarSS(',num2str(nn),')=',VAR_Shortname{mm},'_ss',num2str(nn),';']);
     end
@@ -248,7 +249,7 @@ for mm=1:Num_VAR
     for nn=1:Num_Models 
         if SS0==1 
         elseif DispType(mm)==0 && ModelSolving==1
-            DivSS=VarSS(nn);
+            DivSS=abs(VarSS(nn));
             PlusSS=0;
         elseif DispType(mm)==1 && ModelSolving==1
             Percentt=1;
@@ -309,10 +310,10 @@ for mm=1:Num_VAR
                    legend2{1,ll+countt}=Legend_Names{1,ll}; 
                elseif includelinearsolution(ll)==1
                    legend2{1,ll+countt}=Legend_Names{1,ll};
-                   legend2{1,ll+countt+1}=[Legend_Names{1,ll},' (without ZLB)'];
+                   legend2{1,ll+countt+1}=[Legend_Names{1,ll},' (without ELB)'];
                    countt=1+countt;
                else 
-                   legend2{1,ll+countt}=[Legend_Names{1,ll},' (without ZLB)'];
+                   legend2{1,ll+countt}=[Legend_Names{1,ll},' (without ELB)'];
                end
                %if isempty(Model_Names{ll,2})
                %    legend2{1,ll+countt}=[Legend_Names{1,ll},' (without constraint)'];
@@ -325,8 +326,9 @@ for mm=1:Num_VAR
             
         end
     end
-   
     axis([1 nperiods -inf inf])
+    
+
     %include zeroline
     plot(t,zeroline,'r','LineWidth',0.5)
     hold off
